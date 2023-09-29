@@ -45,4 +45,5 @@ def get():
     _download()
     _unzip()
 
-get()
+if __name__ == '__main__':
+    get()
