@@ -33,5 +33,5 @@ def spark_lower_cols(df):
 
 def _display(df, n=5):
     import pandas as pd
-    _df = pd.DataFrame(df.head(n), columns=df.columns())
-    display(_df)
+    _df = pd.DataFrame(df.head(n), columns=df.columns)
+    return (_df)
