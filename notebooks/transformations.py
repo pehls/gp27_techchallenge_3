@@ -76,7 +76,7 @@ def _get_escolaridade(codigo):
 def _get_resposta_covid(codigo):
     resposta = {
         '1': 'Sim',
-        '2': 'Não ',
+        '2': 'Não',
         '3': 'Não sabe',
         '9': 'Ignorado',
     }
@@ -85,7 +85,7 @@ def _get_resposta_covid(codigo):
 def _get_internado(codigo):
     resposta = {
         '1': 'Sim',
-        '2': 'Não ',
+        '2': 'Não',
         '3': 'Não foi atendido',
         '9': 'Ignorado',
     }
