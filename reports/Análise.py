@@ -17,6 +17,53 @@ st.info("""
 
 tab_dados, tab_tecnologia, tab_transformacao, tab_ingestao, tab_modelo = st.tabs(['Dados utilizados', 'Tecnologia', 'Transformação', 'Ingestão', 'Modelo'])
 
+with tab_dados:
+    st.markdown("""
+Foram utilizados dados da PNAD entre setembro e novembro de 2020, devido á existência da resposta de ter covid ou não nesses meses.
+Ainda, os dados foram limpos, para utilização do modelo estatístico para análise da importância das variáveis, excluindo linhas que contenham nulos, de modo a termos dados suficientes para a análise utilizando a biblioteca Pandas e Scikit-learn, em memória.
+    """)
+
+with tab_tecnologia:
+    st.markdown("""
+    """)
+    
+with tab_transformacao:
+    st.markdown("""
+    """)
+    
+with tab_ingestao:
+    st.markdown("""
+Capturando os dados da PNAD, ingerimos os mesmos em uma camada de dados crua (`raw`), que também recebeu os conteúdos das tabelas-dimensão, representando os Estados do Brasil (UF's), área de domicílio (Urbana/Rural), Sexo (Masculino/Feminino), Raça (Branca/Amarela/Parda/Indígena/Ignorado),
+Escolaridade, Resposta de internação ou não, e a resposta positiva/negativa/não sabe, Faixa de Rendimento (familiar), Situação de Domicílio (próprio/aluguel/etc), e uma tabela com as questões escolhidas;
+                
+Foi elaborada uma segunda camada de dados (`refined`), contendo uma transformação da tabela principal (de dados da PNAD), normalizando dados das colunas com nomes mais "amigáveis", de acordo com o mapa de questões:
+- "UF"-> "uf"
+- "V1012"-> "semana_mes"
+- "V1013"-> "mes"
+- "V1022"-> "area_domicilio"
+- "A002"-> "idade"
+- "A003"-> "sexo"
+- "A004"-> "cor_raca"
+- "A005"-> "escolaridade"
+- "B0011"-> "teve_febre"
+- "B0014"-> "teve_dificuldade_respirar"
+- "B0015"-> "teve_dor_cabeca"
+- "B0019"-> "teve_fadiga"
+- "B00111"-> "teve_perda_cheiro"
+- "B002"-> "foi_posto_saude"
+- "B0031"-> "ficou_em_casa"
+- "B005"-> "ficou_internado"
+- "B009B"-> "resultado_covid"
+- "B007"-> "tem_plano_saude"
+- "C007B"-> "assalariado"
+- "C01011"-> "faixa_rendimento"
+- "F001"-> "situacao_domicilio"
+
+Nesta Camada, as tabelas dimensão seguem inalteradas, e deve ser utilizada como fonte caso seja necessário recuperar respostas numéricas, conforme o próprio questionário.
+                
+Como último ponto, foi criada a camada de dados confiáveis (`trusted`), contendo o dado da camada refinada  com todas as transformações aplicadas, ou seja, o conteúdo de cada coluna é o conteúdo da tabela-dimensão, e existem apenas dados entre os meses de setembro e novembro de 2020, uma "regra de negócio" aplicada de acordo com o problema proposto, de utilizar apenas 3 meses de dados e no máximo 20 perguntas.
+    """)
+    
 with tab_modelo:
     st.markdown("""
         Utilizando um modelo de árvores chamado `Random Forest`, que cria várias árvores de decisão, de maneira aleatória, gerando uma espécie de votação para realizar decisões sobre a classe a qual o dado pertence, 

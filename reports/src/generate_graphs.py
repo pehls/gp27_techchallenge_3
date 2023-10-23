@@ -75,3 +75,4 @@ def _plot_modelo_completo(df):
         )
     )
     return fig
+
