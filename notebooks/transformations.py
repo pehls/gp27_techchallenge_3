@@ -222,6 +222,8 @@ def transform(df):
     df = df.withColumn('situacao_domicilio', _transform_situacao_domicilio(df.situacao_domicilio))
 
     # Keep only months 9, 10, 11
-    df = df.filter(f.col('mes').isin([9,10,11]))
+    df = df\
+        .filter(f.col('mes').isin([9,10,11]))\
+        .na.drop()
     
     return df
