@@ -221,9 +221,29 @@ def transform(df):
     df = df.withColumn('faixa_rendimento', _transform_faixa_rendimento(df.faixa_rendimento))
     df = df.withColumn('situacao_domicilio', _transform_situacao_domicilio(df.situacao_domicilio))
 
-    # Keep only months 9, 10, 11
+    # Replace 'NA' with None
+    cols = [
+          'resultado_covid'
+        , 'uf'
+        , 'area_domicilio'
+        , 'idade'
+        , 'sexo'
+        , 'cor_raca'
+        , 'escolaridade'
+        , 'tem_plano_saude'
+        , 'situacao_domicilio'
+        , 'teve_febre'
+        , 'teve_dificuldade_respirar'
+        , 'teve_dor_cabeca'
+        , 'teve_fadiga'
+        , 'teve_perda_cheiro'
+        ]
+    for col in cols:
+        df = df.withColumn(col, f.when(f.col(col)=='NA', None).otherwise(f.col(col)))
+        
+    # Keep only months 9, 10, 11 and drop None
     df = df\
         .filter(f.col('mes').isin([9,10,11]))\
-        .na.drop()
+        .na.drop(subset=cols)
     
     return df
