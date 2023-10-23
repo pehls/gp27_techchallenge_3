@@ -13,6 +13,7 @@ def _plot_data(df2):
 
     return fig
 
+
 def _plot_modelo_completo(df):
     from sklearn.inspection import permutation_importance
     from sklearn.preprocessing import OneHotEncoder
