@@ -15,7 +15,7 @@ st.info("""
 """)
 
 
-tab_dados, tab_tecnologia, tab_transformacao, tab_ingestao, tab_modelo = st.tabs(['Dados utilizados', 'Tecnologia', 'Transformação', 'Ingestão', 'Modelo'])
+tab_dados, tab_tecnologia, tab_transformacao_e_ingestao, tab_modelo = st.tabs(['Dados utilizados', 'Tecnologia', 'Transformação e Ingestão', 'Modelo'])
 
 with tab_dados:
     st.markdown("""
@@ -25,13 +25,11 @@ Ainda, os dados foram limpos, para utilização do modelo estatístico para aná
 
 with tab_tecnologia:
     st.markdown("""
+Para a manipulação dos dados, foi utilizado o PySpark, e algumas de suas transformações para manipular dados de forma paralela.
+Como fonte dos dados, o BigQuery foi escolhido pela sua facilidade de utilização e manutenção.
     """)
     
-with tab_transformacao:
-    st.markdown("""
-    """)
-    
-with tab_ingestao:
+with tab_transformacao_e_ingestao:
     st.markdown("""
 Capturando os dados da PNAD, ingerimos os mesmos em uma camada de dados crua (`raw`), que também recebeu os conteúdos das tabelas-dimensão, representando os Estados do Brasil (UF's), área de domicílio (Urbana/Rural), Sexo (Masculino/Feminino), Raça (Branca/Amarela/Parda/Indígena/Ignorado),
 Escolaridade, Resposta de internação ou não, e a resposta positiva/negativa/não sabe, Faixa de Rendimento (familiar), Situação de Domicílio (próprio/aluguel/etc), e uma tabela com as questões escolhidas;

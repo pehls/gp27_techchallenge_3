@@ -38,6 +38,14 @@ def _get_importance_data_sintomas():
         fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020
     where
         resultado_covid in ('Sim','Não')
+        and idade is not null
+        and sexo is not null
+        and tem_plano_saude is not null
+        and teve_febre is not null
+        and teve_dificuldade_respirar is not null
+        and teve_dor_cabeca is not null
+        and teve_fadiga is not null
+        and teve_perda_cheiro is not null
     """
     df = run_query(query)
     return pd.DataFrame(df).dropna()
@@ -64,6 +72,19 @@ def _get_importance_data_allfeatures():
         fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020
     where
         resultado_covid in ('Sim','Não')
+        and uf is not null
+        and area_domicilio is not null
+        and idade is not null
+        and sexo is not null
+        and cor_raca is not null
+        and escolaridade is not null
+        and tem_plano_saude is not null
+        and situacao_domicilio is not null
+        and teve_febre is not null
+        and teve_dificuldade_respirar is not null
+        and teve_dor_cabeca is not null
+        and teve_fadiga is not null
+        and teve_perda_cheiro is not null
     """
     df = run_query(query)
     return pd.DataFrame(df).dropna()
