@@ -19,7 +19,7 @@ tab_dados, tab_tecnologia, tab_transformacao, tab_ingestao, tab_modelo = st.tabs
 
 with tab_modelo:
     st.markdown("""
-        Utilizando um modelo de árvores chamado "Random Forest", que cria várias árvores de decisão, de maneira aleatória, gerando uma espécie de votação para realizar decisões sobre a classe a qual o dado pertence, 
+        Utilizando um modelo de árvores chamado `Random Forest`, que cria várias árvores de decisão, de maneira aleatória, gerando uma espécie de votação para realizar decisões sobre a classe a qual o dado pertence, 
         iremos observar a importância das features, utilizando o método de permutação.
         Tal método visa capturar a influência que cada variável tem nas predições do modelo, ao alterar aleatoriamente os valores de cada coluna, uma coluna por vez.
     """)

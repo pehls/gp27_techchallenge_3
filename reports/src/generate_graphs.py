@@ -23,7 +23,7 @@ def _plot_modelo_completo(df):
     from sklearn.ensemble import RandomForestClassifier
     import plotly.express as px
 
-    _features = list(set(df.columns) - set('resultado_covid'))
+    _features = list(set(df.columns) - set(['resultado_covid']))
 
     transform_pipeline = Pipeline(
         steps = [
