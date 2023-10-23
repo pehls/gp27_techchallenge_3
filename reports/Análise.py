@@ -36,3 +36,7 @@ with tab_modelo:
         generate_graphs._plot_modelo_completo(get_data._get_importance_data_sintomas()),
         use_container_width=True,
     )
+
+    st.markdown("""
+        A partir dessa análise inicial, vamos destrinchar os detalhes de cada categoria de variável, nas próximas páginas :)
+    """)
