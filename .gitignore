@@ -89,5 +89,6 @@ target/
 .mypy_cache/
 
 venv
+.venv
 
-fiap-tech-challenge-3.json
+*.json
