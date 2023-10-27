@@ -92,3 +92,4 @@ venv
 .venv
 
 *.json
+.streamlit/secrets.toml
