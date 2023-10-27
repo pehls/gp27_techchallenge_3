@@ -3,10 +3,11 @@ import matplotlib.pyplot as plt
 from statsmodels.tsa.seasonal import seasonal_decompose
 from sklearn.metrics import mean_absolute_percentage_error
 import seaborn as sns
+import plotly.express as px
+from plotly import graph_objects as go
 import src.get_data as get_data 
 
 def _plot_data(df2):
-    from plotly import graph_objects as go
     fig = go.Figure(
         data=go.Bar()
     )
@@ -21,7 +22,7 @@ def _plot_modelo_completo(df):
     from imblearn.under_sampling import RandomUnderSampler
     from sklearn.model_selection import train_test_split
     from sklearn.ensemble import RandomForestClassifier
-    import plotly.express as px
+    
 
     _features = list(set(df.columns) - set(['resultado_covid']))
 
@@ -76,3 +77,66 @@ def _plot_modelo_completo(df):
     )
     return fig
 
+def _plot_inicial(crosstab):
+    # Criando um gráfico empilhado.
+    fig = px.bar(
+        crosstab,
+        x=crosstab.index, y=crosstab.columns,
+        title="Distribuição dos Resultados de COVID-19 Empilhados por Mês (Excluindo 'NA')",
+        color_discrete_map={
+              'Ignorado':'purple'
+            , 'Não' : 'red'
+            , "Não sabe" : 'goldenrod'
+            , 'Sim':'blue'
+            }, text_auto=True
+    )
+    fig.update_layout(
+        yaxis=dict(
+            title='Número de Casos',
+            showgrid=False,
+            showline=False,
+            showticklabels=True
+        ),
+        xaxis=dict(
+            title='Mês',
+            showgrid=False,
+            showline=False,
+            showticklabels=True
+        )
+    )
+    return fig
+
+def _plot_inicial_porcentagens(percentuais_por_mes):
+    fig = px.line( 
+        percentuais_por_mes,
+        x='mes', y='value', 
+        color='resultado_covid',  text='value',
+        color_discrete_map={
+              'Ignorado':'purple'
+            , 'Não' : 'red'
+            , "Não sabe" : 'goldenrod'
+            , 'Sim':'blue'
+            }
+    )
+    fig.update_traces(textposition="top right")
+    fig.update_layout(
+        yaxis=dict(
+            title='% de Casos',
+            showgrid=False,
+            showline=False,
+            showticklabels=True
+        ),
+        xaxis=dict(
+            title='Mês',
+            showgrid=False,
+            showline=False,
+            showticklabels=True
+        )
+    )
+    return fig
+
+def _map_plot(mapa):
+    # Plot
+    fig = px.choropleth(mapa, geojson=mapa.geometry, locations=mapa.uf, color="Casos Positivos")
+    fig.update_geos(fitbounds="locations", visible=False)
+    return fig
