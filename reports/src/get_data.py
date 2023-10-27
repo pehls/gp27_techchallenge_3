@@ -142,3 +142,64 @@ def _get_importance_data_allfeatures():
     """
     df = run_query(query)
     return pd.DataFrame(df).dropna()
+
+@st.cache_data
+def _get_sintomas_clinicos():
+    query = """
+      SELECT
+        'teve_febre' questao,
+        teve_febre resp,
+        COUNT(teve_febre) total
+      FROM
+        `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+      WHERE
+        resultado_covid = 'Sim'
+      GROUP BY
+        teve_febre
+      UNION ALL
+      SELECT
+        'teve_dificuldade_respirar' questao,
+        teve_dificuldade_respirar resp,
+        COUNT(teve_dificuldade_respirar) total
+      FROM
+        `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+      WHERE
+        resultado_covid = 'Sim'
+      GROUP BY
+        teve_dificuldade_respirar
+      UNION ALL
+      SELECT
+        'teve_dor_cabeca' questao,
+        teve_dor_cabeca resp,
+        COUNT(teve_dor_cabeca) total
+      FROM
+        `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+      WHERE
+        resultado_covid = 'Sim'
+      GROUP BY
+        teve_dor_cabeca
+      UNION ALL
+      SELECT
+        'teve_fadiga' questao,
+        teve_fadiga resp,
+        COUNT(teve_fadiga) total
+      FROM
+        `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+      WHERE
+        resultado_covid = 'Sim'
+      GROUP BY
+        teve_fadiga
+      UNION ALL
+      SELECT
+        'teve_perda_cheiro' questao,
+        teve_perda_cheiro resp,
+        COUNT(teve_perda_cheiro) total
+      FROM
+      `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+      WHERE
+        resultado_covid = 'Sim'
+      GROUP BY
+        teve_perda_cheiro
+    """
+    df = run_query(query)
+    return pd.DataFrame(df).dropna()
