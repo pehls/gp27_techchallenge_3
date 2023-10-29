@@ -6,6 +6,7 @@ import seaborn as sns
 import plotly.express as px
 from plotly import graph_objects as go
 import src.get_data as get_data 
+import json
 
 def _plot_data(df2):
     fig = go.Figure(
@@ -135,8 +136,56 @@ def _plot_inicial_porcentagens(percentuais_por_mes):
     )
     return fig
 
-def _map_plot(mapa):
+def _map_plot(geodf, mapa):
     # Plot
-    fig = px.choropleth(mapa, geojson=mapa.geometry, locations=mapa.uf, color="Casos Positivos")
-    fig.update_geos(fitbounds="locations", visible=False)
+    fig = go.Figure(
+        go.Choroplethmapbox(geojson=json.loads(geodf.to_json()),
+                            locations=geodf.index,
+                            z=mapa["Casos Positivos"],)
+    )
+    fig.update_layout(
+        mapbox_style="carto-positron",
+        mapbox=dict(center=dict(lat=-13.0918, lon=-53.2350),zoom=2)
+        )
+    # fig.update_geos(fitbounds="locations", visible=False)
+    # fig = go.Figure(
+    #     go.Choroplethmapbox(geojson=mapa.geometry, 
+    #                         locations=mapa.uf, z=mapa["Casos Positivos"],
+    #                         colorscale="Viridis", zmin=0, zmax=12,
+    #                         marker_opacity=0.5, marker_line_width=0)
+    # )
+    # fig.update_layout(mapbox_style="carto-positron",
+    #                   mapbox_zoom=3, 
+    #                   mapbox_center = {"lat": 37.0902, "lon": -95.7129})
+    return fig
+
+def _plot_sintomas(questao_selecionada, df):
+    questao_selecionada = 'teve_'+questao_selecionada.replace('?','').replace(' ','_').lower()
+    df = df.loc[df.questao==questao_selecionada]
+    fig = px.bar(
+        df,
+        x='resp', y='total',
+        color='resultado_covid',
+        title="Distribuição dos Resultados de COVID-19 Empilhados por Mês (Excluindo 'NA')",
+        color_discrete_map={
+              'Ignorado':'purple'
+            , 'Não' : 'red'
+            , "Não sabe" : 'goldenrod'
+            , 'Sim':'blue'
+            }, text_auto=True
+    )
+    fig.update_layout(
+        yaxis=dict(
+            title='Número de Casos',
+            showgrid=False,
+            showline=False,
+            showticklabels=True
+        ),
+        xaxis=dict(
+            title='Resposta',
+            showgrid=False,
+            showline=False,
+            showticklabels=True
+        )
+    )
     return fig

@@ -243,7 +243,6 @@ def transform(df):
         
     # Keep only months 9, 10, 11 and drop None
     df = df\
-        .filter(f.col('mes').isin([9,10,11]))\
-        .na.drop(subset=cols)
+        .filter(f.col('mes').isin([9,10,11]))
     
     return df

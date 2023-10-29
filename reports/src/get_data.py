@@ -6,6 +6,7 @@ from google.oauth2 import service_account
 from google.cloud import bigquery
 import geopandas as gpd
 import pyproj
+import json
 
 # Create API client.
 credentials = service_account.Credentials.from_service_account_info(
@@ -22,8 +23,6 @@ def run_query(query):
     # Convert to list of dicts. Required for st.cache_data to hash the return value.
     rows = [dict(row) for row in rows_raw]
     return rows
-
-
 
 @st.cache_data
 def _get_initial_data():
@@ -56,24 +55,24 @@ def _get_localizacao():
             , uf
         from
             fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020
+        where
+            resultado_covid in ('Sim')
     """
-    df = pd.DataFrame(run_query(query))
+    df_casos_positivos = pd.DataFrame(run_query(query))
     # Criando tabela para verificar apenas pesquisas onde os resultados foram iguais a Sim
-    df_casos_positivos = df[df['resultado_covid'] == 'Sim']
+    # df_casos_positivos = df[df['resultado_covid'] == 'Sim']
 
     # Agregar e contar casos positivos por estado
     casos_positivos_por_estado = df_casos_positivos['uf'].value_counts().reset_index()
     casos_positivos_por_estado.columns = ['uf', 'Casos Positivos']
 
-    shapefile_path = './reports/shapefile/bcim_2016_21_11_2018.gpkg'
-    mapa = gpd.read_file(shapefile_path)
-    return mapa
-    mapa.to_crs(pyproj.CRS.from_epsg(4326), inplace=True)
+    shapefile_path = './reports/shapefile'
+    mapa = gpd.read_file(shapefile_path).to_crs("WGS84").set_index('NM_UF')
+    # return mapa
     # Junte o DataFrame `casos_positivos_por_estado` com o mapa usando a sigla dos estados
-    mapa = mapa.merge(casos_positivos_por_estado, left_on='nomeabrev', right_on='uf', how='left')
+    # mapa = mapa.merge(casos_positivos_por_estado, left_on='NM_UF', right_on='uf', how='left')
 
-    return mapa
-
+    return mapa, casos_positivos_por_estado
 
 @st.cache_data
 def _get_importance_data_sintomas():
@@ -202,4 +201,65 @@ def _get_sintomas_clinicos():
         teve_perda_cheiro
     """
     df = run_query(query)
-    return pd.DataFrame(df).dropna()
+    return pd.DataFrame(df)#.dropna()
+
+@st.cache_data
+def _get_sintomas_clinicos_all():
+    query = """
+      SELECT
+        'teve_febre' questao,
+        teve_febre resp,
+        resultado_covid,
+        COUNT(teve_febre) total
+      FROM
+        `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+      GROUP BY
+        teve_febre,
+        resultado_covid
+      UNION ALL
+      SELECT
+        'teve_dificuldade_respirar' questao,
+        teve_dificuldade_respirar resp,
+        resultado_covid,
+        COUNT(teve_dificuldade_respirar) total
+      FROM
+        `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+      GROUP BY
+        teve_dificuldade_respirar,
+        resultado_covid
+      UNION ALL
+      SELECT
+        'teve_dor_cabeca' questao,
+        teve_dor_cabeca resp,
+        resultado_covid,
+        COUNT(teve_dor_cabeca) total
+      FROM
+        `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+      GROUP BY
+        teve_dor_cabeca,
+        resultado_covid
+      UNION ALL
+      SELECT
+        'teve_fadiga' questao,
+        teve_fadiga resp,
+        resultado_covid,
+        COUNT(teve_fadiga) total
+      FROM
+        `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+      GROUP BY
+        teve_fadiga,
+        resultado_covid
+      UNION ALL
+      SELECT
+        'teve_perda_cheiro' questao,
+        teve_perda_cheiro resp,
+        resultado_covid,
+        COUNT(teve_perda_cheiro) total
+      FROM
+      `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+      GROUP BY
+        teve_perda_cheiro,
+        resultado_covid
+    """
+    df = run_query(query)
+    return pd.DataFrame(df)#.dropna()
