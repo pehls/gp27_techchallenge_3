@@ -1,6 +1,8 @@
 import streamlit as st
 import src.generate_graphs as generate_graphs
 import src.get_data as get_data
+from PIL import Image
+
 
 st.write("""
     # Tech Challenge #03 - Grupo 27 
@@ -31,6 +33,8 @@ with tab_tecnologia:
 Para a manipulação dos dados, foi utilizado o PySpark, e algumas de suas transformações para manipular dados de forma paralela.
 Como fonte dos dados, o BigQuery foi escolhido pela sua facilidade de utilização e manutenção.
     """)
+    image = Image.open('reports/figures/tech-challenge-03-ingestao.png')
+    st.image(image)
     
 with tab_transformacao_e_ingestao:
     st.markdown("""
