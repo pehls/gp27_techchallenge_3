@@ -15,7 +15,10 @@ st.info("""
 """)
 
 
-tab_dados, tab_tecnologia, tab_transformacao_e_ingestao, tab_modelo = st.tabs(['Dados utilizados', 'Tecnologia', 'Transformação e Ingestão', 'Modelo'])
+tab_dados, tab_tecnologia, tab_transformacao_e_ingestao, tab_modelo_dados = st.tabs(
+    ['Dados utilizados', 'Tecnologia', 
+     'Transformação e Ingestão', 'Modelo de dados']
+    )
 
 with tab_dados:
     st.markdown("""
@@ -62,7 +65,7 @@ Nesta Camada, as tabelas dimensão seguem inalteradas, e deve ser utilizada como
 Como último ponto, foi criada a camada de dados confiáveis (`trusted`), contendo o dado da camada refinada  com todas as transformações aplicadas, ou seja, o conteúdo de cada coluna é o conteúdo da tabela-dimensão, e existem apenas dados entre os meses de setembro e novembro de 2020, uma "regra de negócio" aplicada de acordo com o problema proposto, de utilizar apenas 3 meses de dados e no máximo 20 perguntas.
     """)
     
-with tab_modelo:
+with tab_modelo_dados:
     st.markdown("""
         Utilizando um modelo de árvores chamado `Random Forest`, que cria várias árvores de decisão, de maneira aleatória, gerando uma espécie de votação para realizar decisões sobre a classe a qual o dado pertence, 
         iremos observar a importância das features, utilizando o método de permutação.
