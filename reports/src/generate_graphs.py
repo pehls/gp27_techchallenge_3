@@ -89,7 +89,11 @@ def _plot_inicial(crosstab):
             , 'Não' : 'red'
             , "Não sabe" : 'goldenrod'
             , 'Sim':'blue'
-            }, text_auto=True
+            },
+            category_orders={
+                'Resposta Covid':[
+                    'Sim', 'Não', 'Não sabe', 'Ignorado'
+                ]}, text_auto=True
     )
     fig.update_layout(
         yaxis=dict(
@@ -117,7 +121,11 @@ def _plot_inicial_porcentagens(percentuais_por_mes):
             , 'Não' : 'red'
             , "Não sabe" : 'goldenrod'
             , 'Sim':'blue'
-            }
+            },
+            category_orders={
+                'Resposta Covid':[
+                    'Sim', 'Não', 'Não sabe', 'Ignorado'
+                ]}
     )
     fig.update_traces(textposition="top right")
     fig.update_layout(
@@ -141,22 +149,14 @@ def _map_plot(geodf, mapa):
     fig = go.Figure(
         go.Choroplethmapbox(geojson=json.loads(geodf.to_json()),
                             locations=geodf.index,
-                            z=mapa["Casos Positivos"],)
+                            z=mapa["Casos Positivos"],
+                            )
     )
     fig.update_layout(
         mapbox_style="carto-positron",
-        mapbox=dict(center=dict(lat=-13.0918, lon=-53.2350),zoom=2)
+        mapbox=dict(center=dict(lat=-13.0918, lon=-53.2350),zoom=2),
+                            title='Casos Positivos de COVID-19 por Estado no Brasil'
         )
-    # fig.update_geos(fitbounds="locations", visible=False)
-    # fig = go.Figure(
-    #     go.Choroplethmapbox(geojson=mapa.geometry, 
-    #                         locations=mapa.uf, z=mapa["Casos Positivos"],
-    #                         colorscale="Viridis", zmin=0, zmax=12,
-    #                         marker_opacity=0.5, marker_line_width=0)
-    # )
-    # fig.update_layout(mapbox_style="carto-positron",
-    #                   mapbox_zoom=3, 
-    #                   mapbox_center = {"lat": 37.0902, "lon": -95.7129})
     return fig
 
 def _plot_sintomas(questao_selecionada, df):
@@ -164,22 +164,26 @@ def _plot_sintomas(questao_selecionada, df):
     df = df.loc[df.questao==questao_selecionada]
     fig = px.bar(
         df,
-        x='resp', y='total',
-        color='resultado_covid',
-        title="Distribuição dos Resultados de COVID-19 Empilhados por Mês (Excluindo 'NA')",
+        x='Resposta Pergunta', y='Porcentagem de Respondentes',
+        color='Resposta Covid',
+        title="Distribuição dos Resultados de COVID-19 por Meses (Excluindo 'NA')",
         color_discrete_map={
               'Ignorado':'purple'
             , 'Não' : 'red'
             , "Não sabe" : 'goldenrod'
             , 'Sim':'blue'
-            }, text_auto=True
+            }, text_auto=True,
+        category_orders={
+                'Resposta Covid':[
+                    'Sim', 'Não', 'Não sabe', 'Ignorado'
+                ]},
+        hover_data=['Número de Respondentes']
     )
     fig.update_layout(
         yaxis=dict(
-            title='Número de Casos',
             showgrid=False,
             showline=False,
-            showticklabels=True
+            showticklabels=False
         ),
         xaxis=dict(
             title='Resposta',
@@ -188,4 +192,37 @@ def _plot_sintomas(questao_selecionada, df):
             showticklabels=True
         )
     )
+    fig.for_each_trace(lambda t: t.update(texttemplate = t.texttemplate + ' %'))
+    return fig
+
+def _plot_analise_economica(df, order={}):
+    fig = px.bar(
+        df,
+        x='Resposta Pergunta', y='Porcentagem de Respondentes',
+        color='Resposta Covid',
+        title="Distribuição dos Resultados de COVID-19 (Excluindo 'NA')",
+        color_discrete_map={
+              'Ignorado':'purple'
+            , 'Não' : 'red'
+            , "Não sabe" : 'goldenrod'
+            , 'Sim':'blue'
+            }, text_auto=True,
+        category_orders=order,
+        hover_data=['Número de Respondentes']
+    )
+    fig.update_layout(
+        yaxis=dict(
+            showgrid=False,
+            showline=False,
+            showticklabels=False
+        ),
+        xaxis=dict(
+            title='Resposta',
+            showgrid=False,
+            showline=False,
+            showticklabels=True
+        )
+    )
+    fig.for_each_trace(lambda t: t.update(texttemplate = t.texttemplate + ' %'))
+
     return fig

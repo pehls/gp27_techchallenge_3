@@ -4,9 +4,9 @@ import src.get_data as get_data
 
 st.title('Análise sócio-demográfica')
 
-tab_analise_inicial, tab_positivos, tab_sintomas, tab_cor_raca, tab_escolaridade = st.tabs(
+tab_analise_inicial, tab_positivos = st.tabs(
     [
-        'Definição dos Meses',"Localização dos Positivos", 'Sintomas Apresentados', 'Cor/Raça','Escolaridade'
+        'Definição dos Meses',"Localização dos Positivos"
     ]
 )
 
@@ -35,6 +35,7 @@ with tab_analise_inicial:
 
 with tab_positivos:
     st.markdown("""
+    Quando observamos a localização dos "positivados", notamos uma predominância nos estados do Acre, Amazonas e Pará;
     """)
     geodf, mapa = get_data._get_localizacao()
     # st.write(get_data._get_localizacao())
@@ -43,27 +44,3 @@ with tab_positivos:
             geodf, mapa
         )
     )
-
-with tab_sintomas:
-    st.markdown("""
-    """)
-
-    df = get_data._get_sintomas_clinicos_all()
-    questao_selecionada = st.radio('Questões', 
-                                   [x.replace('teve_','').replace('_',' ').capitalize()+'?' for x in df.questao.unique()], 
-                                   horizontal=True)
-    st.plotly_chart(
-        generate_graphs._plot_sintomas(
-            questao_selecionada, df
-            )
-    )
-    
-with tab_cor_raca:
-    st.markdown("""
-    """)
-    st.plotly_chart()
-    
-with tab_escolaridade:
-    st.markdown("""
-    """)
-    st.plotly_chart()

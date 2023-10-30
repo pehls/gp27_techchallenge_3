@@ -201,7 +201,8 @@ def _get_sintomas_clinicos():
         teve_perda_cheiro
     """
     df = run_query(query)
-    return pd.DataFrame(df)#.dropna()
+
+    return pd.DataFrame(df).dropna()
 
 @st.cache_data
 def _get_sintomas_clinicos_all():
@@ -261,5 +262,234 @@ def _get_sintomas_clinicos_all():
         teve_perda_cheiro,
         resultado_covid
     """
-    df = run_query(query)
-    return pd.DataFrame(df)#.dropna()
+    df = pd.DataFrame(run_query(query)).dropna()
+    return df
+
+@st.cache_data
+def _get_calculated_sintomas(df, groupby=['questao','resp']):
+    df['n'] = df['total'].astype(int)
+    df = df.drop(columns={'total'}).merge(
+        df\
+          .groupby(groupby)\
+          .agg(total=('n','sum'))\
+          .reset_index(),
+        on=groupby, how='left'
+    )
+    df['percentage'] = round((df['n']/df['total'])*100, 2)
+    df = df.rename(columns={
+        'n':'Número de Respondentes',
+        'total':'Total de Respondentes',
+        'percentage':'Porcentagem de Respondentes',
+        'resultado_covid':'Resposta Covid',
+        'resp':'Resposta Pergunta'
+    })
+    return df
+
+@st.cache_data
+def _get_cor_raca():
+    query = """
+    SELECT
+      cor_raca resp,
+      resultado_covid,
+      COUNT(*) n
+    FROM
+      `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+    GROUP BY
+      cor_raca,
+      resultado_covid
+    """
+    df = pd.DataFrame(run_query(query)).dropna()
+    df['n'] = df['n'].astype(int)
+    df = df.merge(
+        df\
+          .groupby(['resp'])\
+          .agg(total=('n','sum'))\
+          .reset_index(),
+        on=['resp'], how='left'
+    )
+    df['percentage'] = round((df['n']/df['total'])*100, 2)
+    # df['percentage'] = df.n
+    df = df.rename(columns={
+        'n':'Número de Respondentes',
+        'total':'Total de Respondentes',
+        'percentage':'Porcentagem de Respondentes',
+        'resultado_covid':'Resposta Covid',
+        'resp':'Resposta Pergunta'
+    })
+    return df
+
+@st.cache_data
+def _get_escolaridade():
+    query = """
+    SELECT
+      escolaridade resp,
+      resultado_covid,
+      COUNT(*) n
+    FROM
+      `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+    GROUP BY
+      escolaridade,
+      resultado_covid
+    """
+    df = pd.DataFrame(run_query(query)).dropna()
+    df['n'] = df['n'].astype(int)
+    df = df.merge(
+        df\
+          .groupby(['resp'])\
+          .agg(total=('n','sum'))\
+          .reset_index(),
+        on=['resp'], how='left'
+    )
+    df['percentage'] = round((df['n']/df['total'])*100, 2)
+    # df['percentage'] = df.n
+    df = df.rename(columns={
+        'n':'Número de Respondentes',
+        'total':'Total de Respondentes',
+        'percentage':'Porcentagem de Respondentes',
+        'resultado_covid':'Resposta Covid',
+        'resp':'Resposta Pergunta'
+    })
+    return df
+
+@st.cache_data
+def _get_faixa_rendimento():
+    query = """
+    SELECT
+      faixa_rendimento resp,
+      resultado_covid,
+      COUNT(*) n
+    FROM
+      `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+    GROUP BY
+      faixa_rendimento,
+      resultado_covid
+    """
+    df = pd.DataFrame(run_query(query)).dropna()
+    df['n'] = df['n'].astype(int)
+    df = df.merge(
+        df\
+          .groupby(['resp'])\
+          .agg(total=('n','sum'))\
+          .reset_index(),
+        on=['resp'], how='left'
+    )
+    df['percentage'] = round((df['n']/df['total'])*100, 2)
+    # df['percentage'] = df.n
+    df = df.rename(columns={
+        'n':'Número de Respondentes',
+        'total':'Total de Respondentes',
+        'percentage':'Porcentagem de Respondentes',
+        'resultado_covid':'Resposta Covid',
+        'resp':'Resposta Pergunta'
+    })
+    return df
+
+@st.cache_data
+def _get_tem_plano_saude():
+    query = """
+    SELECT
+      tem_plano_saude resp,
+      resultado_covid,
+      COUNT(*) n
+    FROM
+      `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+    GROUP BY
+      tem_plano_saude,
+      resultado_covid
+    """
+    df = pd.DataFrame(run_query(query)).dropna()
+    df['n'] = df['n'].astype(int)
+    df = df.merge(
+        df\
+          .groupby(['resp'])\
+          .agg(total=('n','sum'))\
+          .reset_index(),
+        on=['resp'], how='left'
+    )
+    df['percentage'] = round((df['n']/df['total'])*100, 2)
+    # df['percentage'] = df.n
+    df = df.rename(columns={
+        'n':'Número de Respondentes',
+        'total':'Total de Respondentes',
+        'percentage':'Porcentagem de Respondentes',
+        'resultado_covid':'Resposta Covid',
+        'resp':'Resposta Pergunta'
+    })
+    return df
+
+@st.cache_data
+def _get_situacao_domicilio():
+    query = """
+    SELECT
+      situacao_domicilio resp,
+      resultado_covid,
+      COUNT(*) n
+    FROM
+      `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+    GROUP BY
+      situacao_domicilio,
+      resultado_covid
+    """
+    df = pd.DataFrame(run_query(query)).dropna()
+    df['n'] = df['n'].astype(int)
+    df = df.merge(
+        df\
+          .groupby(['resp'])\
+          .agg(total=('n','sum'))\
+          .reset_index(),
+        on=['resp'], how='left'
+    )
+    df['percentage'] = round((df['n']/df['total'])*100, 2)
+    # df['percentage'] = df.n
+    df = df.rename(columns={
+        'n':'Número de Respondentes',
+        'total':'Total de Respondentes',
+        'percentage':'Porcentagem de Respondentes',
+        'resultado_covid':'Resposta Covid',
+        'resp':'Resposta Pergunta'
+    })
+    return df
+
+def idade_para_faixa_etaria(idade):
+    if idade >= 70:
+        return "+70"
+    faixa_etaria = (idade // 10) * 10
+    return f'{faixa_etaria}-{faixa_etaria + 9} anos'
+
+@st.cache_data
+def _get_idade():
+    query = """
+    SELECT
+      idade resp,
+      resultado_covid,
+      COUNT(*) n
+    FROM
+      `fiap-tech-challenge-3.trusted_pnad.tb_f_covid_2020`
+    GROUP BY
+      idade,
+      resultado_covid
+    """
+    df = pd.DataFrame(run_query(query)).dropna()
+    df['n'] = df['n'].astype(int)
+    df['resp'] = df['resp'].apply(idade_para_faixa_etaria)
+    df = df\
+        .groupby(['resp','resultado_covid'])\
+          .agg(n=('n','sum'))\
+          .reset_index()\
+          .merge(
+        df\
+          .groupby(['resp'])\
+          .agg(total=('n','sum'))\
+          .reset_index(),
+        on=['resp'], how='left'
+    )
+    df['percentage'] = round((df['n']/df['total'])*100, 2)
+    # df['percentage'] = df.n
+    df = df.rename(columns={
+        'n':'Número de Respondentes',
+        'total':'Total de Respondentes',
+        'percentage':'Porcentagem de Respondentes',
+        'resultado_covid':'Resposta Covid',
+        'resp':'Resposta Pergunta'
+    })
+    return df
