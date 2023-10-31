@@ -17,9 +17,9 @@ st.info("""
 """)
 
 
-tab_dados, tab_tecnologia, tab_transformacao_e_ingestao, tab_modelo_dados = st.tabs(
+tab_dados, tab_tecnologia, tab_transformacao_e_ingestao = st.tabs(
     ['Dados utilizados', 'Tecnologia', 
-     'Transformação e Ingestão', 'Modelo de dados']
+     'Transformação e Ingestão']
     )
 
 with tab_dados:
@@ -34,14 +34,14 @@ Para a manipulação dos dados, foi utilizado o PySpark, e algumas de suas trans
 Como fonte dos dados, o BigQuery foi escolhido pela sua facilidade de utilização e manutenção.
     """)
     image = Image.open('reports/figures/tech-challenge-03-ingestao.png')
-    st.image(image)
+    st.image(image, caption='Ingestão de dados')
     
 with tab_transformacao_e_ingestao:
     st.markdown("""
-Capturando os dados da PNAD, ingerimos os mesmos em uma camada de dados crua (`raw`), que também recebeu os conteúdos das tabelas-dimensão, representando os Estados do Brasil (UF's), área de domicílio (Urbana/Rural), Sexo (Masculino/Feminino), Raça (Branca/Amarela/Parda/Indígena/Ignorado),
+Capturando os dados da PNAD, ingerimos os mesmos em uma camada de dados crua (`raw_pnad`), que também recebeu os conteúdos das tabelas-dimensão, representando os Estados do Brasil (UF's), área de domicílio (Urbana/Rural), Sexo (Masculino/Feminino), Raça (Branca/Amarela/Parda/Indígena/Ignorado),
 Escolaridade, Resposta de internação ou não, e a resposta positiva/negativa/não sabe, Faixa de Rendimento (familiar), Situação de Domicílio (próprio/aluguel/etc), e uma tabela com as questões escolhidas;
                 
-Foi elaborada uma segunda camada de dados (`refined`), contendo uma transformação da tabela principal (de dados da PNAD), normalizando dados das colunas com nomes mais "amigáveis", de acordo com o mapa de questões:
+Foi elaborada uma segunda camada de dados (`refined_pnad`), contendo uma transformação da tabela principal (de dados da PNAD), normalizando dados das colunas com nomes mais "amigáveis", de acordo com o mapa de questões:
 - "UF"-> "uf"
 - "V1012"-> "semana_mes"
 - "V1013"-> "mes"
@@ -65,12 +65,15 @@ Foi elaborada uma segunda camada de dados (`refined`), contendo uma transformaç
 - "F001"-> "situacao_domicilio"
 
 Nesta Camada, as tabelas dimensão seguem inalteradas, e deve ser utilizada como fonte caso seja necessário recuperar respostas numéricas, conforme o próprio questionário.
-                
-Como último ponto, foi criada a camada de dados confiáveis (`trusted`), contendo o dado da camada refinada  com todas as transformações aplicadas, ou seja, o conteúdo de cada coluna é o conteúdo da tabela-dimensão, e existem apenas dados entre os meses de setembro e novembro de 2020, uma "regra de negócio" aplicada de acordo com o problema proposto, de utilizar apenas 3 meses de dados e no máximo 20 perguntas.
     """)
     
-with tab_modelo_dados:
+    image = Image.open('reports/figures/tech-challenge-03-model-db.png')
+    st.image(image, caption='Modelagem banco - schema refined_pnad')
+
     st.markdown("""
-       
+Como último ponto, foi criada a camada de dados confiáveis (`trusted_pnad`), contendo o dado da camada refinada  com todas as transformações aplicadas, ou seja, o conteúdo de cada coluna é o conteúdo da tabela-dimensão, e existem apenas dados entre os meses de setembro e novembro de 2020, uma "regra de negócio" aplicada de acordo com o problema proposto, de utilizar apenas 3 meses de dados e no máximo 20 perguntas.
     """)
+
+    image = Image.open('reports/figures/tech-challenge-03-bigquery.png')
+    st.image(image, caption='BigQuery', width=500)
     
