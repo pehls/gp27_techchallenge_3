@@ -3,7 +3,6 @@ import src.generate_graphs as generate_graphs
 import src.get_data as get_data
 from PIL import Image
 
-
 st.write("""
     # Tech Challenge #03 - Grupo 27 
     ## Análise de dados da COVID - set/2020 a nov/2020
@@ -42,28 +41,30 @@ Capturando os dados da PNAD, ingerimos os mesmos em uma camada de dados crua (`r
 Escolaridade, Resposta de internação ou não, e a resposta positiva/negativa/não sabe, Faixa de Rendimento (familiar), Situação de Domicílio (próprio/aluguel/etc), e uma tabela com as questões escolhidas;
                 
 Foi elaborada uma segunda camada de dados (`refined_pnad`), contendo uma transformação da tabela principal (de dados da PNAD), normalizando dados das colunas com nomes mais "amigáveis", de acordo com o mapa de questões:
-- "UF"-> "uf"
-- "V1012"-> "semana_mes"
-- "V1013"-> "mes"
-- "V1022"-> "area_domicilio"
-- "A002"-> "idade"
-- "A003"-> "sexo"
-- "A004"-> "cor_raca"
-- "A005"-> "escolaridade"
-- "B0011"-> "teve_febre"
-- "B0014"-> "teve_dificuldade_respirar"
-- "B0015"-> "teve_dor_cabeca"
-- "B0019"-> "teve_fadiga"
-- "B00111"-> "teve_perda_cheiro"
-- "B002"-> "foi_posto_saude"
-- "B0031"-> "ficou_em_casa"
-- "B005"-> "ficou_internado"
-- "B009B"-> "resultado_covid"
-- "B007"-> "tem_plano_saude"
-- "C007B"-> "assalariado"
-- "C01011"-> "faixa_rendimento"
-- "F001"-> "situacao_domicilio"
-
+```json
+{  
+    "UF": "uf",
+    "V1012": "semana_mes",
+    "V1013": "mes",
+    "V1022": "area_domicilio",
+    "A002": "idade",
+    "A003": "sexo",
+    "A004": "cor_raca",
+    "A005": "escolaridade",
+    "B0011": "teve_febre",
+    "B0014": "teve_dificuldade_respirar",
+    "B0015": "teve_dor_cabeca",
+    "B0019": "teve_fadiga",
+    "B00111": "teve_perda_cheiro",
+    "B002": "foi_posto_saude",
+    "B0031": "ficou_em_casa",
+    "B005": "ficou_internado",
+    "B007": "tem_plano_saude",
+    "C007B": "assalariado",
+    "C01011": "faixa_rendimento",
+    "F001": "situacao_domicilio"
+}
+```
 Nesta Camada, as tabelas dimensão seguem inalteradas, e deve ser utilizada como fonte caso seja necessário recuperar respostas numéricas, conforme o próprio questionário.
     """)
     
