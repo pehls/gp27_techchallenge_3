@@ -31,7 +31,3 @@ st.plotly_chart(
 st.markdown("""
     Mesmo removendo algumas destas variáveis, vemos itens como `idade`, `tem_plano_saude` e `sexo` destoando como principais drivers!
 """)
-
-st.markdown("""
-    A partir dessa análise inicial, vamos destrinchar os detalhes de cada categoria de variável, nas próximas páginas :)
-""")
